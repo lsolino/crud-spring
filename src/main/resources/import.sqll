@@ -1,0 +1,2 @@
+insert into funcionario(id, nome, cpf, telefone, salario) values (1, 'José', '12345678900', '27325000', 1350);
+insert into tarefa(id, descricao, prioridade, data_inicio, data_entrega, completado, funcionario_id) values (1, 'Criar CRUD', 'Alta','2019-06-22', '2019-07-22', false, 1);

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="application">
+
+  <section layout:fragment="Conteudo">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Telefone</th>
+          <th>Salário (R$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each = "funcionario : ${funcionario_obj}">
+          <td th:text="${funcionario.id}">ID</td>
+          <td th:text="${funcionario.nome}">Nome</td>
+          <td th:text="${funcionario.cpf}">CPF</td>
+          <td th:text="${funcionario.telefone}">Telefone</td>
+          <td th:text="${funcionario.salario}">Salário</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="row" style="margin: 50px">
+      <div class="col-md-4 col-sm-4">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Tarefa</div>
+            <div class="panel-body">
+              <form class="form-inline" method="POST" th:object="${tarefa}" th:action="@{/tarefas/{funcionarioid}(funcionarioid=${funcionario_obj.id})}"  style="margin: 20px 0">
+                <div th:if="${#fields.hasErrors('*')}"> 
+                    <p> Erro</p>
+                    <h3 th:each="erro : ${#fields.errors('*')}" th:text="${erro}"></h3> 
+                </div>
+                <div class="form-group">
+                  <input type="hidden" th:field="*{id}" />
+                </div>
+                <div class="form-group">
+                  <label for="descricao">Descricao: &nbsp;</label>
+                  <input class="form-control" type="text" th:field="*{descricao}" name="descricao" id="descricao" placeholder="Descricao"/>
+                </div>
+                <br>
+                <br>
+                <div class="form-group">
+                  <label for="prioridade">Prioridade: &nbsp;</label>
+                  <input class="form-control" type="text" th:field="*{prioridade}" name="prioridade" id="prioridade" placeholder="Prioridade"/>
+                </div>
+                <br>
+                <br>
+                <div class="form-group">
+                  <label for="data_entrega">Data de Entrega: &nbsp;</label>
+                  <input class="form-control" type="date" th:field="*{data_entrega}" name="data_entrega" id="data_entrega" placeholder="Data de Entrega"/>
+                </div>
+                <br>
+                <br>
+                <div class="form-group">
+                  <label for="completado">Completado? &nbsp;</label>
+                  <input class="form-control" type="radio" name="completado" th:field="*{completado}" id="completado" th:value="false">Não
+                  <input class="form-control" type="radio" name="completado" th:field="*{completado}" id="completado" th:value="true">Sim
+                </div>
+                <br>
+                <br>
+                <input class="btn btn-primary" type="submit" value="Salvar"/>
+              </form>
+            </div>  
+        </div>
+      </div>
+      <div class="col-md-8 col-sm-8">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Lista de Tarefas</div>
+          <div class="panel-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Descrição</th>
+                  <th>Prioridade</th>
+                  <th>Data de Entrega</th>
+                  <th>Completado</th>
+                  <th colspan="2">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="tarefa : ${tarefas_func}">
+                  <td th:text="${tarefa.id}">ID</td>
+                  <td th:text="${tarefa.descricao}">Descrição</td>
+                  <td th:text="${tarefa.prioridade}">Prioridade</td>
+                  <td th:text="${tarefa.data_entrega}">Data de Entrega</td>
+                  <td th:if="${tarefa.completado}" th:text="Sim">Completado?</td>
+                  <td th:unless="${tarefa.completado}" th:text="Não">Completado?</td>
+                  <td>
+                    <a th:href="@{/tarefas/alterar/}+${tarefa.id}" 
+                      class="btn btn-warning">Editar
+                    </a>
+                    <a th:href="@{/tarefas/excluir/}+${tarefa.id}" 
+                      class="btn btn-danger" onclick="return confirm('Deseja realmente excluir essa tarefa?')">Apagar
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</html>
